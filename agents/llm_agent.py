@@ -13,9 +13,6 @@ logger = get_logger("LLM-agent")
 
 dotenv.load_dotenv()
 
-
-
-
 class LLMAgent:
     
     def __init__(self, tools,model_name=MODEL_NAME):
@@ -70,4 +67,32 @@ class LLMAgent:
             
         except Exception as e:
             print(f"Error in llm agent init: {e}")
+            raise
+        
+    
+    async def get_response(self, question):
+        
+        try:
+          
+            if not question:
+                raise ValueError("question is empty")
+            
+            response = await self.llm_agent.ainvoke({
+                "messages":[ {
+                    "role": "user",
+                    "content": question
+                }
+                            ]
+            }, config=self.config)
+            
+            logger.info("Reponse is fetched")
+            return response  
+            
+            
+        except ValueError as e:
+            print(f"Value error: {e}")
+            raise
+            
+        except Exception as e:
+            print(f"Error in get response: {e}")
             raise
