@@ -19,3 +19,5 @@ class MCPServer:
             """
         )
 
+mcp_server = MCPServer()
+mcp = mcp_server.mcp_server

@@ -1,8 +1,6 @@
-from mcp_server.server import MCPServer
 
+from mcp_server.server import mcp
 
-mcp_server = MCPServer()
-mcp = mcp_server.mcp_server
 
 @mcp.tool
 async def addition(a:float, b:float) -> float:
@@ -75,3 +73,7 @@ async def division(a:float, b:float):
     except Exception as e:
         print(f"Error in llm agent init: {e}")
         raise
+    
+if __name__ == "__main__":
+    
+    mcp.run()
