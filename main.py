@@ -3,6 +3,9 @@ from mcp_server.server import mcp
 import asyncio
 from fastmcp.client.transports import StdioTransport
 from fastmcp.client import Client
+from langchain_mcp_adapters.tools import load_mcp_tools
+from mcp.client.stdio import stdio_client, StdioServerParameters
+from mcp.client.session import ClientSession
 
 
 async def main():
@@ -10,12 +13,23 @@ async def main():
     try:
         
         
-        stdio_transport = StdioTransport(
+        # stdio_transport = StdioTransport(
+        #     command="python",
+        #     args=["mcp_server/mcp_stdio.py"]
+        # )
+        
+        # stdio_clinet = Client(stdio_transport)
+        
+        server_params = StdioServerParameters(
             command="python",
             args=["mcp_server/mcp_stdio.py"]
         )
         
-        stdio_clinet = Client(stdio_transport)
+        async with stdio_client(server_params) as (read, write, _sid):
+            
+            async with ClientSession(read,write) as session:
+                await session.initialize()
+                tools = await load_mcp_tools(session)
         
         
     except ValueError as e:
