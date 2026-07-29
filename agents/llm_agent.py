@@ -86,7 +86,7 @@ class LLMAgent:
             }, config=self.config)
             
             logger.info("Reponse is fetched")
-            return response  
+            return response['messages'][-1].content 
             
             
         except ValueError as e:

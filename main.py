@@ -8,7 +8,7 @@ from mcp.client.stdio import stdio_client, StdioServerParameters
 from mcp.client.session import ClientSession
 
 
-async def main():
+async def main(question):
     
     try:
         
@@ -29,7 +29,12 @@ async def main():
             
             async with ClientSession(read,write) as session:
                 await session.initialize()
-                tools = await load_mcp_tools(session)
+                tools = await load_mcp_tools(session) 
+                agent = LLMAgent(tools)
+                response = await agent.get_response(question)
+                
+                return response
+                
         
         
     except ValueError as e:
@@ -42,4 +47,6 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    
+    question = input("Please give your query here")
+    asyncio.run(main(question))
